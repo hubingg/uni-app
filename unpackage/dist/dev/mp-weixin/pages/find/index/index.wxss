@@ -1,0 +1,17 @@
+
+.uni-swiper-tab {
+	width: 100%;
+	white-space: nowrap;
+}
+.swiper-tab-list {
+	display: inline-block;
+	font-size: 28rpx;
+	color:rgba(136,136,136,1);
+	margin: 0 24rpx;
+}
+.active {
+	font-size:34px;
+	font-weight:500;
+	color:rgba(51,51,51,1);
+}
+

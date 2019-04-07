@@ -16,6 +16,10 @@
 // 		{
 // 		    "path" : "pages/uni-tabs/uni-tabs"
 // 		}
+        ,{
+            "path" : "pages/find/detail/detail",
+            "style" : {}
+        }
     ],
     "globalStyle" : {
         "navigationBarTextStyle" : "black",

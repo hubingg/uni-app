@@ -6,8 +6,8 @@
 		</scroll-view>
 		<swiper :current="tabIndex" class="swiper-box" duration="300" @change="changeTab">
 			<swiper-item v-for="(tab,index1) in tabItemPages" :key="index1">
-				<scroll-view class="list" scroll-y @scrolltolower="loadMore(index1)" @scrolltoupper="refresh(index1)">
-					<!-- <uni-refresh :refreshType="tabItemPages[index1].refreshType"></uni-refresh> -->
+				<scroll-view class="list" scroll-y @scrolltolower="loadMore(index1)">
+					<uni-refresh :refreshType="tabItemPages[index1].refreshType"></uni-refresh>
 					<!-- 顶部banner start -->
 					<block v-if="banners != null && banners.length > 0">
 						<swiper class="swiper" :indicator-dots="false" :autoplay="true" :interval="2000" :duration="500">
@@ -19,7 +19,8 @@
 					</block>
 					<!-- 顶部banner end -->
 					<block v-for="(item2,index2) in listData" :key="index2">
-						<find-list :data="item2" :data-item="item2" @clickItem="goDetail(item2)"></find-list>
+							<!-- <media-list :data="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-list> -->
+						<find-list :data="item2"></find-list>
 					</block>
 					<view class="uni-tab-bar-loading">
 						<uni-load-more :loadingType="tabItemPages[index1].loadingType"></uni-load-more>
@@ -49,6 +50,7 @@
 				tabBars: [],
 				listData: [],
 				banners: [],
+				newsitems: [],
 				categoryID: '-1',
 				resourceHostPic: 'https://a8-domain.pagoda.com.cn:11052/miResourceMgr',
 				index: 0,
@@ -89,7 +91,6 @@
 				}
 			},
 			async changeTab(e) {
-				this.listData = []
 				let index = e.detail.current;
 				if (this.isClickChange) {
 					this.tabIndex = index;
@@ -136,6 +137,8 @@
 					res => {
 						if (res.data.errorCode === 0) {
 							this.tabBars = res.data.data
+							this.newsitems = this.randomfn()
+							console.log(this.newsitems)
 							this.initItemPage()
 						}
 					}
@@ -159,16 +162,18 @@
 					res => {
 						if (res.data.errorCode === 0) {
 							let data = res.data.data || {}
-							this.listData = this.listData.concat(data.articles)
+							let listData = this.tabItemPages[index].articles || []
+							this.listData = listData.concat(data.articles)
 							this.tabItemPages[index].hasNextPage = data.hasNextPage
 							this.tabItemPages[index].pageNum += 1
 							this.tabItemPages[index].banners = data.banners
+							this.tabItemPages[index].articles = listData.concat(data.articles)
 							if (data.hasNextPage === 'Y') {
 								this.tabItemPages[index].loadingType = 0
 							} else {
 								this.tabItemPages[index].loadingType = 2
 							}
-							this.tabItemPages[index].refreshType = 0
+							
 						}
 					}, e => {
 						this.tabItemPages[index].refreshType = 0
@@ -184,13 +189,6 @@
 					this.getFindList(index, pageNum)
 				}
 			},
-			// 下拉刷新
-			refresh (index) {
-// 				this.listData = []
-// 				let pageNum = this.tabItemPages[index].pageNum
-// 				this.tabItemPages[index].refreshType = 1
-// 				this.getFindList(index, pageNum)
-			},
 			randomfn() {
 				let ary = [];
 				for (let i = 0, length = this.tabBars.length; i < length; i++) {
@@ -204,14 +202,7 @@
 					ary.push(aryItem);
 				}
 				return ary;
-			},
-			// 去详情页
-			goDetail(e) {
-				console.log(e)
-				uni.navigateTo({
-                    url: '/pages/find/detail/detail?articleID='+e.article.articleID
-                })
-            },
+			}
 		},
 	}
 </script>

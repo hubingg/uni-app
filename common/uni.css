@@ -1,0 +1,20 @@
+uni-page-body {
+	width: 100%;
+	flex-grow: 1;
+	overflow-x: hidden;
+	background-color: #F5F5F5;
+	height: 100%;
+	font-size: 28upx;
+	line-height: 1.8;
+} 
+.uni-tab-bar {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	overflow: hidden;
+	height: 100%;
+}
+.uni-tab-bar .list {
+	width: 750upx;
+	height: 100%;
+}
